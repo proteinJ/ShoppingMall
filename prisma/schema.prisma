@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  name     String
+  phone    String?
+  role     String @default("user") // user, admin, seller
+
+  login_time       DateTime?          @map("login_time") @db.DateTime(0)
+  logout_time      DateTime?          @map("logout_time") @db.DateTime(0)
+  
+  fail_login_count Int?               @default(0) @map("fail_login_count") @db.UnsignedInt
+  is_locked        Boolean?           @default(false) @map("is_locked")
+  
+  is_deleted Boolean @default(false)
+  deletedAt       DateTime?          @map("deleted_at") @db.DateTime(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // 관계
+  addresses Address[]
+  orders    Order[]
+  reviews   Review[]
+  cart      CartItem[]
+  
+  @@map("users")
+}
+
+model Category {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String?
+  slug        String @unique
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // 관계
+  products Product[]
+  
+  @@map("categories")
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String?
+  price       Int
+  stock       Int    @default(0)
+  images      String? // 이미지 URL 배열
+  status      String @default("active") // active, inactive, discontinued
+  
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 관계
+  orderItems  OrderItem[]
+  reviews     Review[]
+  cartItems   CartItem[]
+  
+  @@map("products")
+}
+
+model Address {
+  id          Int    @id @default(autoincrement())
+  name        String // 배송지명 (집, 회사 등)
+  recipient   String // 받는사람
+  phone       String
+  zipcode     String
+  address     String
+  detailAddress String?
+  isDefault   Boolean @default(false)
+  
+  userId      Int
+  user        User @relation(fields: [userId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 관계
+  orders      Order[]
+  
+  @@map("addresses")
+}
+
+model Order {
+  id          Int    @id @default(autoincrement())
+  orderNumber String @unique
+  status      String @default("pending") // pending, confirmed, shipped, delivered, cancelled
+  totalAmount Int
+  shippingFee Int    @default(0)
+  
+  userId      Int
+  user        User @relation(fields: [userId], references: [id])
+  
+  addressId   Int
+  address     Address @relation(fields: [addressId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 관계
+  orderItems  OrderItem[]
+  
+  @@map("orders")
+}
+
+model OrderItem {
+  id       Int @id @default(autoincrement())
+  quantity Int
+  price    Int // 주문 당시 가격
+  
+  orderId   Int
+  order     Order @relation(fields: [orderId], references: [id])
+  
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  
+  createdAt DateTime @default(now())
+  
+  @@map("order_items")
+}
+
+model CartItem {
+  id       Int @id @default(autoincrement())
+  quantity Int
+  
+  userId    Int
+  user      User @relation(fields: [userId], references: [id])
+  
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+model Review {
+  id      Int    @id @default(autoincrement())
+  rating  Int    // 1-5 별점
+  comment String?
+  
+  userId    Int
+  user      User @relation(fields: [userId], references: [id])
+  
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, productId])
+  @@map("reviews")
+}
