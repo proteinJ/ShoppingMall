@@ -34,6 +34,7 @@ export async function POST(request) {
 		}
 
 		const userId = user.id;
+		const role = user.role;
 		const isMatch = await verifyPassword(password, user.password);
 
 		if (isMatch) {
@@ -69,7 +70,7 @@ export async function POST(request) {
 			  });
 
 			// userId를 JWT에 넣어 쿠키로 저장
-			await setAuthCookies(userId, email, refreshToken);
+			await setAuthCookies(userId, email, role, refreshToken);
 
 			// 로그인 성공 시 로그인 시간 갱신 및 실패 횟수 초기화
 			await prisma.user.update({

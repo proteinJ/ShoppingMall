@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -9,162 +8,156 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-  name     String
-  phone    String?
-  role     String @default("user") // user, admin, seller
+  id                  Int                  @id @default(autoincrement())
+  email               String               @unique
+  password            String
+  name                String
+  phone               String?
+  role                String               @default("user")
+  login_time          DateTime?            @map("login_time") @db.DateTime(0)
+  logout_time         DateTime?            @map("logout_time") @db.DateTime(0)
+  fail_login_count    Int?                 @default(0) @map("fail_login_count") @db.UnsignedInt
+  is_locked           Boolean?             @default(false) @map("is_locked")
+  is_deleted          Boolean              @default(false)
+  deletedAt           DateTime?            @map("deleted_at") @db.DateTime(0)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  addresses           Address[]
+  cart                CartItem[]
+  orders              Order[]
+  reviews             Review[]
+  user_refresh_tokens UserRefreshToken?
 
-  login_time       DateTime?          @map("login_time") @db.DateTime(0)
-  logout_time      DateTime?          @map("logout_time") @db.DateTime(0)
-  
-  fail_login_count Int?               @default(0) @map("fail_login_count") @db.UnsignedInt
-  is_locked        Boolean?           @default(false) @map("is_locked")
-  
-  is_deleted Boolean @default(false)
-  deletedAt       DateTime?          @map("deleted_at") @db.DateTime(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  // 관계
-  addresses Address[]
-  orders    Order[]
-  reviews   Review[]
-  cart      CartItem[]
-  
   @@map("users")
 }
 
+model UserRefreshToken {
+  id            Int       @id @default(autoincrement())
+  user_id       Int       @unique
+  refresh_token String    @db.VarChar(512)
+  created_at    DateTime? @default(now()) @db.DateTime(0)
+  expired_at    DateTime? @db.DateTime(0)
+  user_agent    String?   @db.VarChar(255)
+  users         User      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id_user_refresh_tokens")
+
+  @@index([user_id], map: "user_refresh_tokens_idx")
+  @@map("user_refresh_tokens")
+}
+
 model Category {
-  id          Int    @id @default(autoincrement())
-  name        String @unique
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
   description String?
-  slug        String @unique
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  // 관계
-  products Product[]
-  
+  slug        String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
   @@map("categories")
 }
 
 model Product {
-  id          Int    @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
   description String?
   price       Int
-  stock       Int    @default(0)
-  images      String? // 이미지 URL 배열
-  status      String @default("active") // active, inactive, discontinued
-  
+  stock       Int         @default(0)
+  images      String?
+  status      String      @default("active")
   categoryId  Int
-  category    Category @relation(fields: [categoryId], references: [id])
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // 관계
-  orderItems  OrderItem[]
-  reviews     Review[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   cartItems   CartItem[]
-  
+  orderItems  OrderItem[]
+  category    Category    @relation(fields: [categoryId], references: [id])
+  reviews     Review[]
+
+  @@index([categoryId], map: "products_categoryId_fkey")
   @@map("products")
 }
 
 model Address {
-  id          Int    @id @default(autoincrement())
-  name        String // 배송지명 (집, 회사 등)
-  recipient   String // 받는사람
-  phone       String
-  zipcode     String
-  address     String
+  id            Int      @id @default(autoincrement())
+  name          String
+  recipient     String
+  phone         String
+  zipcode       String
+  address       String
   detailAddress String?
-  isDefault   Boolean @default(false)
-  
-  userId      Int
-  user        User @relation(fields: [userId], references: [id])
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // 관계
-  orders      Order[]
-  
+  isDefault     Boolean  @default(false)
+  userId        Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+  orders        Order[]
+
+  @@index([userId], map: "addresses_userId_fkey")
   @@map("addresses")
 }
 
 model Order {
-  id          Int    @id @default(autoincrement())
-  orderNumber String @unique
-  status      String @default("pending") // pending, confirmed, shipped, delivered, cancelled
+  id          Int         @id @default(autoincrement())
+  orderNumber String      @unique
+  status      String      @default("pending")
   totalAmount Int
-  shippingFee Int    @default(0)
-  
+  shippingFee Int         @default(0)
   userId      Int
-  user        User @relation(fields: [userId], references: [id])
-  
   addressId   Int
-  address     Address @relation(fields: [addressId], references: [id])
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // 관계
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
-  
+  address     Address     @relation(fields: [addressId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
+
+  @@index([addressId], map: "orders_addressId_fkey")
+  @@index([userId], map: "orders_userId_fkey")
   @@map("orders")
 }
 
 model OrderItem {
-  id       Int @id @default(autoincrement())
-  quantity Int
-  price    Int // 주문 당시 가격
-  
+  id        Int      @id @default(autoincrement())
+  quantity  Int
+  price     Int
   orderId   Int
-  order     Order @relation(fields: [orderId], references: [id])
-  
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
-  
   createdAt DateTime @default(now())
-  
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@index([orderId], map: "order_items_orderId_fkey")
+  @@index([productId], map: "order_items_productId_fkey")
   @@map("order_items")
 }
 
 model CartItem {
-  id       Int @id @default(autoincrement())
-  quantity Int
-  
+  id        Int      @id @default(autoincrement())
+  quantity  Int
   userId    Int
-  user      User @relation(fields: [userId], references: [id])
-  
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
-  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
   @@unique([userId, productId])
+  @@index([productId], map: "cart_items_productId_fkey")
   @@map("cart_items")
 }
 
 model Review {
-  id      Int    @id @default(autoincrement())
-  rating  Int    // 1-5 별점
-  comment String?
-  
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String?
   userId    Int
-  user      User @relation(fields: [userId], references: [id])
-  
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
-  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
   @@unique([userId, productId])
+  @@index([productId], map: "reviews_productId_fkey")
   @@map("reviews")
 }
+
+
