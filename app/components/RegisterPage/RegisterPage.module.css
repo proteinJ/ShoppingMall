@@ -1,0 +1,214 @@
+.registerContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 1rem;
+}
+
+.registerBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  z-index: -1;
+}
+
+.registerBackground::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="70" r="1" fill="rgba(255,255,255,0.08)"/><circle cx="50" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+}
+
+.registerContent {
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+}
+
+.registerFormContainer {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.registerHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.registerHeader h1 {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #333;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.registerHeader p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.registerForm {
+  margin-bottom: 2rem;
+}
+
+.formRow {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup {
+  width: 100%;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #764ba2;
+  box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+}
+
+.termsContainer {
+  margin-bottom: 2rem;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.checkboxContainer input {
+  margin-right: 0.8rem;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.checkboxContainer a {
+  color: #764ba2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.checkboxContainer a:hover {
+  text-decoration: underline;
+}
+
+.registerButton {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.registerButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+}
+
+.registerFooter {
+  text-align: center;
+}
+
+.registerFooter p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.registerFooter a {
+  color: #764ba2;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.registerFooter a:hover {
+  color: #667eea;
+}
+
+.backHome {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #999 !important;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.backHome:hover {
+  color: #764ba2 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .registerFormContainer {
+    padding: 2rem;
+    margin: 1rem;
+  }
+  
+  .registerHeader h1 {
+    font-size: 1.8rem;
+  }
+  
+  .registerContainer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .registerFormContainer {
+    padding: 1.5rem;
+  }
+  
+  .formGroup input {
+    padding: 0.8rem;
+  }
+}

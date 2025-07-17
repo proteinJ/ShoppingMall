@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
+import MainPage from './components/MainPage';
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,11 +29,7 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar isLoggedIn={isLoggedIn} userInfo={userInfo} />
-      <main style={{ padding: '2rem', textAlign: 'center' }}>
-        <h1>Welcome to My Next.js App</h1>
-        <p>This is a basic setup for Next.js project</p>
-      </main>
+      <MainPage isLoggedIn={isLoggedIn} userInfo={userInfo} />
     </div>
   );
 }
