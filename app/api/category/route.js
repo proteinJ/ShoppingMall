@@ -1,12 +1,13 @@
 // 카테고리 등록(POST)/목록(GET)
 
-// 카테고리 등록
+
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { getLoginUser } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
+// 카테고리 등록(POST)
 export async function POST(request) {
   try {
     const payload = await getLoginUser();
@@ -36,9 +37,11 @@ export async function POST(request) {
     }
 
     await prisma.category.create({
-        name,
-        description,
-        slug,
+        data: {
+            name,
+            description,
+            slug,
+        }
       });
 
         console.log(`[${new Date().toISOString()}] [INFO] ✅ 카테고리 등록 완료 - ${name}`);
@@ -49,6 +52,7 @@ export async function POST(request) {
   }
 }
 
+// 카테고리 목록 조회(GET)
 export async function GET() {
     try {
         const payload = await getLoginUser();
@@ -67,6 +71,7 @@ export async function GET() {
         }
 
         const categories = await prisma.category.findMany({
+            where: { is_deleted: false },
             select: {
                 id: true,
                 name: true,

@@ -49,6 +49,8 @@ model Category {
   name        String    @unique
   description String?
   slug        String    @unique
+  is_deleted          Boolean              @default(false)
+  deletedAt           DateTime?            @map("deleted_at") @db.DateTime(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    Product[]
@@ -65,6 +67,8 @@ model Product {
   images      String?
   status      String      @default("active")
   categoryId  Int
+  is_deleted          Boolean              @default(false)
+  deletedAt           DateTime?            @map("deleted_at") @db.DateTime(0)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   cartItems   CartItem[]
@@ -103,6 +107,8 @@ model Order {
   shippingFee Int         @default(0)
   userId      Int
   addressId   Int
+  is_deleted          Boolean              @default(false)
+  deletedAt           DateTime?            @map("deleted_at") @db.DateTime(0)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]

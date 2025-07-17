@@ -14,7 +14,7 @@ export async function GET(request, { params }) {
         const { productId } = await params;
 
         const FoundProduct = await prisma.product.findUnique({
-            where: { id: Number(productId) },
+            where: { id: Number(productId), is_deleted: false },
             select: {
                 id: true,
                 name: true,
@@ -62,7 +62,7 @@ export async function PUT(request, { params }) {
         const { productId } = await params;
 
         const is_product = await prisma.product.findUnique({
-            where: { id: Number(productId) },
+            where: { id: Number(productId), is_deleted: false },
           });
 
         if (!is_product) {
@@ -104,7 +104,6 @@ export async function PUT(request, { params }) {
 }
 
 // 삭제(DELETE)
-
 export async function DELETE(request, { params }) {
     try {
         const payload = await getLoginUser();
@@ -126,7 +125,7 @@ export async function DELETE(request, { params }) {
         const { productId } = await params;
 
         const is_product = await prisma.product.findUnique({
-            where: { id: Number(productId) },
+            where: { id: Number(productId), is_deleted: false },
           });
 
         if (!is_product) {
@@ -134,8 +133,12 @@ export async function DELETE(request, { params }) {
             return NextResponse.json({ success: false, message: "삭제 할 상품 정보가 없습니다." }, { status: 404 });
         }
 
-        const DeletedProduct = await prisma.product.delete({
+        const DeletedProduct = await prisma.product.update({
             where: { id: Number(productId) },
+            data: {
+              is_deleted: true,
+              deletedAt: new Date()
+            }
           });
 
           if (DeletedProduct) {

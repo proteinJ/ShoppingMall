@@ -55,6 +55,7 @@ export async function GET(request) {
     try {
       // 상품 목록 조회 (모든 사용자 동일)
       const Products = await prisma.product.findMany({
+          where: { is_deleted: false },
           select: {
               id: true,
               name: true,
