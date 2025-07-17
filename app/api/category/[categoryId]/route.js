@@ -14,7 +14,7 @@ export async function GET(request, { params }) {
         const { categoryId } = await params;
 
         const FoundCategory = await prisma.category.findUnique({
-            where: { id: Number(categoryId) },
+            where: { id: Number(categoryId), is_deleted: false },
             select: {
                 id: true,
                 name: true,
@@ -61,7 +61,7 @@ export async function PUT(request, { params }) {
         const { categoryId } = await params;
 
         const is_category = await prisma.category.findUnique({
-            where: { id: Number(categoryId) },
+            where: { id: Number(categoryId), is_deleted: false },
           });
 
         if (!is_category) {
@@ -127,7 +127,7 @@ export async function DELETE(request, { params }) {
 
         // 연결된 상품이 있는지 확인
         const relatedProducts = await prisma.product.findMany({
-            where: { categoryId: Number(categoryId) }
+            where: { categoryId: Number(categoryId), is_deleted: false }
         });
 
         if (relatedProducts.length > 0) {
@@ -139,8 +139,12 @@ export async function DELETE(request, { params }) {
             }, { status: 409 }); // 409 Conflict
         }
 
-        const DeletedCategory = await prisma.category.delete({
-            where: { id: Number(categoryId) },
+        const DeletedCategory = await prisma.category.update({
+            where: { id: Number(categoryId), is_deleted: false },
+            data: {
+              is_deleted: true,
+              deletedAt: new Date()
+            }
           });
 
           if (DeletedCategory) {
