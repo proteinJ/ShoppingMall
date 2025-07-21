@@ -1,4 +1,4 @@
-// 유저 정보 상세(GET), 수정(PATCH), 삭제(DELETE)
+// 유저 정보 상세(GET), 수정(PATCH), 삭제(DELETE), 관리자용 사용자 정보 수정 (PUT)
 import { NextResponse } from "next/server";
 import { PrismaClient } from '@prisma/client';
 import { getLoginUser } from "@/lib/auth";
@@ -9,13 +9,14 @@ import { cookies } from "next/headers";
 const prisma = new PrismaClient();
 
 // 유저 정보 상세(GET)
-export async function GET(request, { params }) {
+export async function GET(request, context) {
     try {
+        const { params } = await context;
         const userId = Number(params.userId);
         const payload = await getLoginUser();
 
         // Case1. 내 정보 조회인 경우
-        if (payload && payload.userId === Number(userId)) {
+        if (payload && payload.userId === Number(userId) && payload.role !== "admin") {
             const user = await prisma.user.findUnique({
                 where: { id: userId, is_deleted: false },
                 select: {
@@ -26,8 +27,7 @@ export async function GET(request, { params }) {
                     createdAt: true,
                     updatedAt: true,
                 }
-            });
-        
+            });  
 
         if (!user) {
             console.log(`[${new Date().toISOString()}] [WARN] ❌ 해당 사용자 없음 - UserId: ${userId}`);
@@ -53,6 +53,7 @@ export async function GET(request, { params }) {
                     email: true,
                     name: true,
                     phone: true,
+                    role: true,
                     createdAt: true,
                     updatedAt: true,
                 }
@@ -70,6 +71,94 @@ export async function GET(request, { params }) {
     } catch (error) {
         console.log(`[${new Date().toISOString()}] [ERROR] ❌인증 실패`);
         return NextResponse.json({ success: false, message: "인증 실패"}, { status: 401 })
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+// 관리자용 사용자 정보 수정 (PUT)
+export async function PUT(request, context) {
+    try {
+        const payload = await getLoginUser();
+
+        if (!payload) {
+            console.log(`[${new Date().toISOString()}] [ERROR] ❌ accessToken(인증정보)가 없습니다.`);
+            return NextResponse.json({ success: false, message: "accessToken(인증정보)가 없습니다."}, { status: 401 });
+        }
+
+        // 관리자 권한 확인
+        if (payload.role !== 'admin') {
+            console.log(`[${new Date().toISOString()}] [WARN] ❌ 관리자 권한 없음 - UserId: ${payload.userId}`);
+            return NextResponse.json({ success: false, message: "관리자 권한이 필요합니다." }, { status: 403 });
+        }
+
+        const { params } = await context;
+        const userId = Number(params.userId);
+        const { name, email, role } = await request.json();
+
+        // 기존 사용자 확인
+        const existingUser = await prisma.user.findUnique({
+            where: { id: userId, is_deleted: false }
+        });
+
+        if (!existingUser) {
+            console.log(`[${new Date().toISOString()}] [WARN] 🚫 수정할 사용자 정보가 없습니다 - ${userId}`);
+            return NextResponse.json({ success: false, message: "수정할 사용자 정보가 없습니다." }, { status: 404 });
+        }
+
+        // 이메일 중복 확인 (본인 제외)
+        if (email && email !== existingUser.email) {
+            const emailExists = await prisma.user.findFirst({
+                where: {
+                    email: email,
+                    id: { not: userId },
+                    is_deleted: false
+                }
+            });
+
+            if (emailExists) {
+                console.log(`[${new Date().toISOString()}] [WARN] 🚫 이미 존재하는 이메일 - ${email}`);
+                return NextResponse.json({ success: false, message: "이미 존재하는 이메일입니다." }, { status: 400 });
+            }
+        }
+
+        // 업데이트 데이터 구성
+        const updateData = {
+            updatedAt: new Date()
+        };
+
+        if (name && name.trim()) {
+            updateData.name = name.trim();
+        }
+
+        if (email && email.trim()) {
+            updateData.email = email.trim();
+        }
+
+        if (role && ['user', 'admin'].includes(role)) {
+            updateData.role = role;
+        }
+
+        // 사용자 정보 수정
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: updateData,
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        });
+
+        console.log(`[${new Date().toISOString()}] [INFO] ✅ 관리자에 의한 사용자 정보 수정 완료 - ${userId}`);
+        return NextResponse.json({ success: true, user: updatedUser }, { status: 200 });
+
+    } catch (error) {
+        console.log(`[${new Date().toISOString()}] [ERROR] ❌ 사용자 정보 수정 실패 ${error}`);
+        return NextResponse.json({ success: false, message: `사용자 정보 수정 실패: ${error.message}` }, { status: 500 });
     } finally {
         await prisma.$disconnect();
     }

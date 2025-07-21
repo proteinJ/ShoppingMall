@@ -1,0 +1,282 @@
+/* app/components/UserModal/UserModal.module.css */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+  
+  .modalContent {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease-out;
+  }
+  
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-50px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    background: white;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .modalHeader h2 {
+    margin: 0;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  
+  .closeButton:hover {
+    background: #f0f0f0;
+    color: #333;
+  }
+  
+  .modalBody {
+    padding: 1.5rem;
+    min-height: 200px;
+  }
+  
+  .loading,
+  .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    text-align: center;
+    color: #666;
+  }
+  
+  .error {
+    color: #e74c3c;
+  }
+  
+  .userInfo {
+    width: 100%;
+  }
+  
+  .viewMode {
+    width: 100%;
+  }
+  
+  .infoGrid {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .infoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .infoItem label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .infoItem span {
+    color: #666;
+  }
+  
+  .roleBadge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .roleBadge.admin {
+    background: #dc3545;
+    color: white;
+  }
+  
+  .roleBadge.user {
+    background: #007bff;
+    color: white;
+  }
+  
+  .statusBadge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: #28a745;
+    color: white;
+  }
+  
+  .editForm {
+    width: 100%;
+  }
+  
+  .formGroup {
+    margin-bottom: 1.5rem;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .formGroup input,
+  .formGroup select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .formGroup input:focus,
+  .formGroup select:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  
+  .formGroup input:disabled,
+  .formGroup select:disabled {
+    background: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .modalFooter {
+    padding: 1.5rem;
+    border-top: 1px solid #eee;
+    background: #f8f9fa;
+    border-radius: 0 0 15px 15px;
+  }
+  
+  .viewButtons,
+  .editButtons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+  
+  .editButton,
+  .deleteButton,
+  .cancelButton,
+  .saveButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .editButton {
+    background: #ffc107;
+    color: #212529;
+  }
+  
+  .editButton:hover:not(:disabled) {
+    background: #e0a800;
+  }
+  
+  .deleteButton {
+    background: #dc3545;
+    color: white;
+  }
+  
+  .deleteButton:hover:not(:disabled) {
+    background: #c82333;
+  }
+  
+  .saveButton {
+    background: #667eea;
+    color: white;
+  }
+  
+  .saveButton:hover:not(:disabled) {
+    background: #5a67d8;
+  }
+  
+  .cancelButton {
+    background: #6c757d;
+    color: white;
+  }
+  
+  .cancelButton:hover:not(:disabled) {
+    background: #5a6268;
+  }
+  
+  .editButton:disabled,
+  .deleteButton:disabled,
+  .cancelButton:disabled,
+  .saveButton:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+  }
+  
+  /* 반응형 */
+  @media (max-width: 768px) {
+    .modalContent {
+      margin: 0.5rem;
+      max-width: calc(100% - 1rem);
+    }
+    
+    .modalHeader,
+    .modalBody,
+    .modalFooter {
+      padding: 1rem;
+    }
+    
+    .viewButtons,
+    .editButtons {
+      flex-direction: column;
+    }
+    
+    .editButton,
+    .deleteButton,
+    .cancelButton,
+    .saveButton {
+      width: 100%;
+    }
+  }

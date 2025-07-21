@@ -9,6 +9,8 @@ const LoginPage = () => {
     password: ''
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -16,9 +18,34 @@ const LoginPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include', // 쿠키 포함
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('로그인 성공!');
+        window.location.href = '/'; // 메인 페이지로 이동
+      } else {
+        alert(data.message || '로그인에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('로그인 오류:', error);
+      alert('로그인 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -42,6 +69,7 @@ const LoginPage = () => {
                 onChange={handleChange}
                 placeholder="Enter your email"
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -55,20 +83,25 @@ const LoginPage = () => {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 required
+                disabled={isLoading}
               />
             </div>
             
             <div className={styles.formOptions}>
               <label className={styles.checkboxContainer}>
-                <input type="checkbox" />
+                <input type="checkbox" disabled={isLoading} />
                 <span className={styles.checkmark}></span>
                 Remember me
               </label>
               <a href="#" className={styles.forgotPassword}>Forgot password?</a>
             </div>
             
-            <button type="submit" className={styles.loginButton}>
-              Sign In
+            <button 
+              type="submit" 
+              className={styles.loginButton}
+              disabled={isLoading}
+            >
+              {isLoading ? 'loging In...' : 'Sign In'}
             </button>
           </form>
           

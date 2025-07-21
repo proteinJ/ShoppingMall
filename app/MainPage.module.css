@@ -1,79 +1,6 @@
-.mainContainer {  /* main-container → mainContainer */
+/* app/components/MainPage/MainPage.module.css */
+.mainContainer {
   min-height: 100vh;
-}
-
-/* Header */
-.header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
-  padding: 0 2rem;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-}
-
-.headerContent {  /* header-content → headerContent */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 70px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.logo a {
-  font-size: 2rem;
-  font-weight: 300;
-  text-decoration: none;
-  color: #333;
-  letter-spacing: 2px;
-}
-
-.navIcons {  /* nav-icons → navIcons */
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.icon img {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.icon:hover img {
-  transform: scale(1.1);
-}
-
-.authButtons {  /* auth-buttons → authButtons */
-  display: flex;
-  gap: 1rem;
-  margin-left: 1rem;
-  align-items: center;
-}
-
-.authLink {  /* auth-link → authLink */
-  padding: 0.5rem 1.5rem;
-  text-decoration: none;
-  color: #333;
-  border: 1px solid #333;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.authLink:hover {
-  background: #333;
-  color: white;
-}
-
-.welcomeText {
-  color: #666;
-  font-size: 0.9rem;
-  margin-right: 0.5rem;
 }
 
 /* Hero Section */
@@ -86,7 +13,7 @@
   overflow: hidden;
 }
 
-.heroBackground {  /* hero-background → heroBackground */
+.heroBackground {
   position: absolute;
   top: 0;
   left: 0;
@@ -108,7 +35,7 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
-.heroContent {  /* hero-content → heroContent */
+.heroContent {
   text-align: center;
   color: white;
   z-index: 1;
@@ -116,7 +43,7 @@
   padding: 0 2rem;
 }
 
-.heroTitle {  /* hero-title → heroTitle */
+.heroTitle {
   font-size: 4rem;
   font-weight: 300;
   margin-bottom: 1rem;
@@ -125,14 +52,14 @@
   animation: fadeInUp 1s ease forwards;
 }
 
-.heroSubtitle {  /* hero-subtitle → heroSubtitle */
+.heroSubtitle {
   font-size: 1.3rem;
   margin-bottom: 2rem;
   opacity: 0;
   animation: fadeInUp 1s ease 0.3s forwards;
 }
 
-.ctaButton {  /* cta-button → ctaButton */
+.ctaButton {
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
   background: transparent;
@@ -163,7 +90,7 @@
 }
 
 /* Featured Products */
-.featuredProducts {  /* featured-products → featuredProducts */
+.featuredProducts {
   padding: 5rem 2rem;
   background: #f8f9fa;
 }
@@ -173,7 +100,7 @@
   margin: 0 auto;
 }
 
-.sectionTitle {  /* section-title → sectionTitle */
+.sectionTitle {
   text-align: center;
   font-size: 2.5rem;
   font-weight: 300;
@@ -181,13 +108,13 @@
   letter-spacing: 2px;
 }
 
-.productsGrid {  /* products-grid → productsGrid */
+.productsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
 
-.productCard {  /* product-card → productCard */
+.productCard {
   background: white;
   border-radius: 15px;
   overflow: hidden;
@@ -200,7 +127,7 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.productImage {  /* product-image → productImage */
+.productImage {
   overflow: hidden;
 }
 
@@ -215,7 +142,7 @@
   transform: scale(1.05);
 }
 
-.productInfo {  /* product-info → productInfo */
+.productInfo {
   padding: 1.5rem;
   text-align: center;
 }
@@ -240,7 +167,7 @@
   padding: 3rem 2rem 1rem;
 }
 
-.footerContent {  /* footer-content → footerContent */
+.footerContent {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
@@ -248,18 +175,18 @@
   gap: 2rem;
 }
 
-.footerInfo h3 {  /* footer-info → footerInfo */
+.footerInfo h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   font-weight: 300;
 }
 
-.contactInfo p {  /* contact-info → contactInfo */
+.contactInfo p {
   margin-bottom: 0.5rem;
   color: #ccc;
 }
 
-.footerLinks {  /* footer-links → footerLinks */
+.footerLinks {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -275,12 +202,22 @@
   color: white;
 }
 
-.footerBottom {  /* footer-bottom → footerBottom */
+.footerBottom {
   text-align: center;
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 1px solid #555;
   color: #999;
+}
+
+/* Loading Container */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
 }
 
 /* Responsive */

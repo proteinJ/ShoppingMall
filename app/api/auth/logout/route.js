@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function POST() {
+export async function GET() {
     try {
         const cookieStore = await cookies();
         const refreshToken = cookieStore.get("refreshToken")?.value;
@@ -48,3 +48,8 @@ export async function POST() {
     }
     
 }
+
+// POST 방식도 지원
+export async function POST(request) {
+    return GET(request);
+  }

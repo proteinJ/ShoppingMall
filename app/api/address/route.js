@@ -68,7 +68,7 @@ export async function GET(request) {
         const userId = payload.userId;
 
         // 주소 목록 조회 
-        const addresss = await prisma.address.findMany({
+        const addresses = await prisma.address.findMany({
             where: { userId },
             select: {
                 id: true,
@@ -82,9 +82,9 @@ export async function GET(request) {
                 }
             });
 
-        if (addresss) {
+        if (addresses) {
           console.log(`[${new Date().toISOString()}] [INFO] ✅ 주소 목록 조회 완료`);
-          return NextResponse.json({ success: true, addresss }, { status: 200 });
+          return NextResponse.json({ success: true, addresses }, { status: 200 });
         } else {
           console.log(`[${new Date().toISOString()}] [WARN] 🚫 주소 목록 정보 없음`);
           return NextResponse.json({ success: true, message: "주소 목록 정보 없음" }, { status: 404 });

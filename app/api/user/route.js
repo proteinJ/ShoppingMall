@@ -15,7 +15,7 @@ export async function GET() {
             }, { status: 401 });
             }
     
-            if (payload.role !== "admin") {
+            if (!payload || payload.role !== "admin") {
                 return NextResponse.json({
                     success: false,
                     message: '관리자만 유저 목록을 조회할 수 있습니다.',
@@ -37,7 +37,8 @@ export async function GET() {
                     deletedAt: true,
                     createdAt: true,
                     updatedAt: true,
-                }
+                },
+                orderBy: { createdAt: 'desc' }
             });
     
             if (users) {

@@ -23,6 +23,7 @@ export async function GET(request, { params }) {
                 stock: true,
                 status: true,
                 categoryId: true,
+                gender: true,
               }
           });
 
@@ -44,18 +45,11 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
     try {
         const payload = await getLoginUser();
-        if (!payload) {
-        return NextResponse.json({
-            success: false,
-            message: '로그인 후 이용 가능합니다.',
-        }, { status: 401 });
-        }
-        console.log(payload.role);
 
-        if (payload.role !== "admin") {
+        if (!payload || payload.role !== "admin") {
             return NextResponse.json({
                 success: false,
-                message: '관리자만 상품을 등록할 수 있습니다.',
+                message: '관리자만 상품을 수정 할 수 있습니다.',
             }, { status: 401 });
         }
 
@@ -70,12 +64,16 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ success: false, message: "수정 할 상품이 없음" }, { status: 404 });
         }
 
+        const formData = await request.formData();
+        
         const name = formData.get('name') ?? is_product.name;
         const description = formData.get('description') ?? is_product.description;
         const price = formData.get('price') !== null ? Number(formData.get('price')) : is_product.price;
         const status = formData.get('status') ?? is_product.status;
         const stock = formData.get('stock') !== null ? Number(formData.get('stock')) : is_product.stock;
         const categoryId = formData.get('categoryId') !== null ? Number(formData.get('categoryId')) : is_product.categoryId;
+        const genderRaw = formData.get('gender');
+        const gender = genderRaw && genderRaw !== '' ? genderRaw : is_product.gender;
 
         const UpdatedProduct = await prisma.product.update({
             where: { id: Number(productId) },
@@ -86,6 +84,7 @@ export async function PUT(request, { params }) {
                 stock,
                 status,
                 categoryId,
+                gender,
               }
           });
 
@@ -107,15 +106,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
     try {
         const payload = await getLoginUser();
-        if (!payload) {
-        return NextResponse.json({
-            success: false,
-            message: '로그인 후 이용 가능합니다.',
-        }, { status: 401 });
-        }
-        console.log(payload.role);
 
-        if (payload.role !== "admin") {
+        if (!payload || payload.role !== "admin") {
             return NextResponse.json({
                 success: false,
                 message: '관리자만 상품을 등록할 수 있습니다.',

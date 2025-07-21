@@ -58,6 +58,34 @@ model Category {
   @@map("categories")
 }
 
+model Tag {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  is_deleted  Boolean   @default(false)
+  deletedAt   DateTime? @map("deleted_at") @db.DateTime(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  productTags ProductTag[]
+}
+
+model ProductTag {
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  tag   Tag @relation(fields: [tagId], references: [id])
+  tagId Int
+
+  @@id([productId, tagId])
+  @@map("product_tags")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNISEX
+}
+
 model Product {
   id          Int         @id @default(autoincrement())
   name        String
@@ -67,6 +95,7 @@ model Product {
   images      String?
   status      String      @default("active")
   categoryId  Int
+  gender      Gender      @default(UNISEX)
   is_deleted          Boolean              @default(false)
   deletedAt           DateTime?            @map("deleted_at") @db.DateTime(0)
   createdAt   DateTime    @default(now())
@@ -74,6 +103,7 @@ model Product {
   cartItems   CartItem[]
   orderItems  OrderItem[]
   category    Category    @relation(fields: [categoryId], references: [id])
+  productTags ProductTag[]
   reviews     Review[]
 
   @@index([categoryId], map: "products_categoryId_fkey")

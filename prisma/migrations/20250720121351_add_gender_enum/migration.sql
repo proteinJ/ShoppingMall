@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `products` ADD COLUMN `gender` ENUM('MALE', 'FEMALE', 'UNISEX') NOT NULL DEFAULT 'UNISEX';

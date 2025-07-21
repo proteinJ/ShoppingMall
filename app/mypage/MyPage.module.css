@@ -1,0 +1,193 @@
+/* app/components/MyPage/MyPage.module.css */
+.myPageContainer {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-top: 70px; /* Navbar 높이만큼 패딩 추가 */
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+}
+
+.sidebar {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.profileSection {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: white;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.profileSection h3 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.profileSection p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navItem {
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+  font-size: 1rem;
+}
+
+.navItem:hover {
+  background: #f8f9fa;
+  color: #333;
+}
+
+.navItem.active {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  color: white;
+}
+
+.mainContent {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.mainContent h2 {
+  margin-bottom: 2rem;
+  color: #333;
+  font-weight: 300;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.infoItem label {
+  display: block;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.infoItem p {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.editButton,
+.shopButton,
+.addButton {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.editButton:hover,
+.shopButton:hover,
+.addButton:hover {
+  transform: translateY(-2px);
+}
+
+.noOrders,
+.noAddresses {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 70px); /* Navbar 높이 빼고 계산 */
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.addressList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.addressItem {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+
+.defaultBadge {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.2em 0.7em;
+  font-size: 0.85em;
+  margin-left: 0.5em;
+  vertical-align: middle;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .myPageContainer {
+    padding-top: 70px;
+  }
+}
