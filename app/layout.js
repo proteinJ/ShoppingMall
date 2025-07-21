@@ -1,4 +1,6 @@
-import './globals.css' // 이미 있음
+// app/layout.js
+import './globals.css';
+import { AuthProvider } from './contexts/AuthContext';
 
 export const metadata = {
   title: 'Au Revoir - Shopping Mall',
@@ -9,8 +11,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
-  )
+  );
 }

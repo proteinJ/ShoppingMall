@@ -1,0 +1,100 @@
+.aboutBg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e0e7ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .aboutCard {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    padding: 3rem 2.5rem;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 1s;
+  }
+  
+  .title {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .desc {
+    color: #555;
+    font-size: 1.15rem;
+    margin-bottom: 2.2rem;
+    line-height: 1.7;
+  }
+  
+  .point {
+    color: #667eea;
+    font-weight: 500;
+  }
+  .point2 {
+    color: #764ba2;
+    font-weight: 500;
+  }
+  
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .featureBox {
+    background: #f3f4f6;
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .emoji {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+  }
+  .featureTitle {
+    font-weight: 600;
+    color: #333;
+    margin-top: 8px;
+  }
+  
+  .shopBtn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    transition: transform 0.2s;
+  }
+  .shopBtn:hover {
+    transform: translateY(-2px) scale(1.03);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+  
+  @media (max-width: 600px) {
+    .aboutCard {
+      padding: 2rem 0.8rem;
+    }
+    .features {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }

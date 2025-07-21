@@ -1,22 +1,43 @@
-# 쇼핑몰 애플리케이션
+# 쇼핑몰 웹사이트 프로젝트
 
-이 프로젝트는 쇼핑몰 웹사이트를 구축하기 위한 웹 애플리케이션입니다. 다양한 UI 컴포넌트와 페이지, 비즈니스 로직을 포함하고 있습니다.
+이 프로젝트는 쇼핑몰 웹사이트를 구축하기 위한 웹 애플리케이션입니다.  
+다양한 UI 컴포넌트와 페이지, 비즈니스 로직을 포함하고 있습니다.
+
+---
 
 ## 프로젝트 구조
 
 ```
 shopping-mall-app
 ├── app
-│   └── api
-│       ├── auth
-│       ├── cart
-│       ├── category
-│       ├── orders
-│       ├── products
-│       ├── review
-│       ├── user
-│       ├── login
-│       └── signup
+│   ├── api
+│   │   ├── address
+│   │   ├── auth
+│   │   ├── cart
+│   │   ├── category
+│   │   ├── orders
+│   │   ├── products
+│   │   ├── review
+│   │   └── user
+│   ├── components
+│   │   ├── AddressModal
+│   │   ├── AdminProductEdit
+│   │   ├── Navbar
+│   │   ├── PageLoader
+│   │   ├── ProductDetail
+│   │   └── UserModal
+│   ├── contexts
+│   ├── login
+│   ├── mypage
+│   ├── products
+│   ├── register
+│   ├── about
+│   ├── admin
+│   ├── layout.js
+│   ├── globals.css
+│   ├── MainPage.module.css
+│   ├── page.jsx
+│   └── page.module.css
 ├── lib                # 공통 함수 및 유틸리티
 ├── prisma             # Prisma 스키마 및 마이그레이션
 ├── public             # 정적 파일
@@ -27,6 +48,9 @@ shopping-mall-app
 ├── tsconfig.json      # TypeScript 설정 파일
 └── README.md          # 프로젝트 문서
 ```
+
+---
+
 ## 기술 스택
 
 - Next.js
@@ -36,9 +60,11 @@ shopping-mall-app
 - MySQL
 - TailwindCSS
 
+---
+
 ## 설치 및 실행
 
-```bash
+```sh
 # 의존성 설치
 npm install
 
@@ -49,14 +75,25 @@ npm install
 npm run dev
 ```
 
+---
+
 ## 주요 기능
 
 - 회원가입 및 로그인 (JWT 인증)
 - 상품 등록/조회/수정/삭제 (관리자)
-- 카테고리 관리
+- 카테고리 및 태그 관리
 - 장바구니 및 주문 기능
 - 상품 리뷰 작성 및 조회
+- 관리자 페이지 (상품/회원/주문 관리)
+- 고객센터/FAQ/문의 기능
+- 반응형 UI 및 메가메뉴 구현
+- 사용자 정보 및 마이페이지
+- 검색 기능 및 필터링
+- 접근 권한 관리 (일반/관리자)
+- 에러/로딩 처리 및 UX 개선
+
+---
 
 ## 문의
 
-- 문의: jaehyun516@naver.com
+문의: jaehyun516@naver.com
