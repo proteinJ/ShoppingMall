@@ -18,7 +18,7 @@ export async function POST(request) {
       }, { status: 401 });
     }
 
-    if (payload.role !== "admin") {
+    if (!payload || payload.role !== "admin") {
         return NextResponse.json({
             success: false,
             message: '관리자만 카테고리를 등록할 수 있습니다.',
@@ -56,14 +56,8 @@ export async function POST(request) {
 export async function GET() {
     try {
         const payload = await getLoginUser();
-        if (!payload) {
-        return NextResponse.json({
-            success: false,
-            message: '로그인 후 이용 가능합니다.',
-        }, { status: 401 });
-        }
 
-        if (payload.role !== "admin") {
+        if (!payload || payload.role !== "admin") {
             return NextResponse.json({
                 success: false,
                 message: '관리자만 카테고리 목록을 조회할 수 있습니다.',

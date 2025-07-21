@@ -43,15 +43,8 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
     try {
         const payload = await getLoginUser();
-        if (!payload) {
-        return NextResponse.json({
-            success: false,
-            message: '로그인 후 이용 가능합니다.',
-        }, { status: 401 });
-        }
-        console.log(payload.role);
 
-        if (payload.role !== "admin") {
+        if (!payload || payload.role !== "admin") {
             return NextResponse.json({
                 success: false,
                 message: '관리자만 카테고리을 등록할 수 있습니다.',
@@ -99,15 +92,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
     try {
         const payload = await getLoginUser();
-        if (!payload) {
-        return NextResponse.json({
-            success: false,
-            message: '로그인 후 이용 가능합니다.',
-        }, { status: 401 });
-        }
-        console.log(payload.role);
 
-        if (payload.role !== "admin") {
+        if (!payload || payload.role !== "admin") {
             return NextResponse.json({
                 success: false,
                 message: '관리자만 카테고리을 등록할 수 있습니다.',
