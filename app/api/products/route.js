@@ -1,11 +1,11 @@
 // 상품 등록(POST)/목록(GET)
 
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getLoginUser } from '@/lib/auth';
 
-const prisma = new PrismaClient();
+
 
 // 상품 등록(POST)
 export async function POST(request) {
@@ -25,19 +25,33 @@ export async function POST(request) {
     const description = formData.get('description');
     const price = Number(formData.get('price'));
     const categoryId = Number(formData.get('categoryId'));
+    const tagIdsRaw = formData.get('tagIds');
+    const tagIds = tagIdsRaw ? JSON.parse(tagIdsRaw) : [];
 
-        await prisma.product.create({
-            data: {
-                name,
-                description,
-                price,
-                categoryId,
-            },
-        });
 
-      console.log(`[${new Date().toISOString()}] [INFO] ✅ 상품 등록 완료`);
-      return NextResponse.json({ success: true, message: `상품 등록 완료` }, { status: 200 });
-  } catch (error) {
+    const product = await prisma.product.create({
+        data: {
+            name,
+            description,
+            price,
+            categoryId,
+        },
+    });
+
+    // 여러 태그 연결
+    if (Array.isArray(tagIds) && tagIds.length > 0) {
+      await prisma.productTag.createMany({
+          data: tagIds.map(tagId => ({
+              productId: product.id,
+              tagId: Number(tagId),
+          })),
+          skipDuplicates: true,
+      });
+    }
+
+    console.log(`[${new Date().toISOString()}] [INFO] ✅ 상품 등록 완료`);
+    return NextResponse.json({ success: true, message: `상품 등록 완료` }, { status: 200 });
+} catch (error) {
     console.log(`[${new Date().toISOString()}] [ERROR] ❌ 상품 등록 로직 실패 ${error}`);
     return NextResponse.json({ success: false, message: `상품 등록 로직 실패: ${error}` }, { status: 500 });
   }
@@ -58,6 +72,17 @@ export async function GET(request) {
               status: true,
               categoryId: true,
               gender: true,
+              productTags: {
+                select: {
+                    tag: {
+                        select: {
+                            id: true,
+                            name: true,
+                            description: true,
+                        }
+                      }
+                  }
+              }
             }
         });
 

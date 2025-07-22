@@ -1,10 +1,10 @@
 // login 로직
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { verifyPassword, setAuthCookies } from "@/lib/auth";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+
 
 export async function POST(request) {
 

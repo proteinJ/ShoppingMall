@@ -1,11 +1,11 @@
 // 카테고리 등록(POST)/목록(GET)
 
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getLoginUser } from '@/lib/auth';
 
-const prisma = new PrismaClient();
+
 
 // 카테고리 등록(POST)
 export async function POST(request) {

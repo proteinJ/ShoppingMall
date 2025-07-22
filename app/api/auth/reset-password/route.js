@@ -1,10 +1,10 @@
 // 전화번호를 통한 비밀번호 변경
 import { hashPassword } from "@/lib/auth";
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { NextResponse } from "next/server";
 import { validateUpdateForm } from "@/lib/validate";
 
-const prisma = new PrismaClient();
+
 
 export async function POST(request) {
     try {

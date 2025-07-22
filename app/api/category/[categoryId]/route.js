@@ -51,7 +51,7 @@ export async function PUT(request, { params }) {
             }, { status: 401 });
         }
 
-        const { categoryId } = await params;
+        const { categoryId } = params;
 
         const is_category = await prisma.category.findUnique({
             where: { id: Number(categoryId), is_deleted: false },

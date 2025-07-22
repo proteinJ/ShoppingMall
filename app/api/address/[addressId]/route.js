@@ -1,9 +1,9 @@
 // 주소 수정(PUT)/삭제(DELETE)
 import { NextResponse } from "next/server";
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { getLoginUser } from "@/lib/auth";
 
-const prisma = new PrismaClient();
+
 
 // 주소 수정(PUT)
 export async function PUT(request, { params }) {

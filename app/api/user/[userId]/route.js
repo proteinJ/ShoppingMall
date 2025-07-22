@@ -1,12 +1,12 @@
 // 유저 정보 상세(GET), 수정(PATCH), 삭제(DELETE), 관리자용 사용자 정보 수정 (PUT)
 import { NextResponse } from "next/server";
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { getLoginUser } from "@/lib/auth";
 import { validateUpdateForm } from "@/lib/validate";
 import { hashPassword } from "@/lib/auth";
 import { cookies } from "next/headers";
 
-const prisma = new PrismaClient();
+
 
 // 유저 정보 상세(GET)
 export async function GET(request, context) {

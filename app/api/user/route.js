@@ -1,9 +1,9 @@
 // 유저 목록 조회(GET)
 import { NextResponse } from "next/server";
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { getLoginUser } from "@/lib/auth";
 
-const prisma = new PrismaClient();
+
 
 export async function GET() {
     try {

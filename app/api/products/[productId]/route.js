@@ -1,12 +1,7 @@
 // 상품 상세(GET)/수정(PUT)/삭제(DELETE)
-
-
-
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getLoginUser } from '@/lib/auth';
-
-const prisma = new PrismaClient();
 
 // 상품 상세(GET)
 export async function GET(request, { params }) {
@@ -24,7 +19,18 @@ export async function GET(request, { params }) {
                 status: true,
                 categoryId: true,
                 gender: true,
-              }
+                productTags: {
+                  select: {
+                      tag: {
+                          select: {
+                              id: true,
+                              name: true,
+                              description: true,
+                          }
+                      }
+                  }
+                }
+            }
           });
 
           if (FoundProduct) {
@@ -74,6 +80,8 @@ export async function PUT(request, { params }) {
         const categoryId = formData.get('categoryId') !== null ? Number(formData.get('categoryId')) : is_product.categoryId;
         const genderRaw = formData.get('gender');
         const gender = genderRaw && genderRaw !== '' ? genderRaw : is_product.gender;
+        const tagIdsRaw = formData.get('tagIds');
+        const tagIds = tagIdsRaw ? JSON.parse(tagIdsRaw) : [];
 
         const UpdatedProduct = await prisma.product.update({
             where: { id: Number(productId) },
@@ -88,13 +96,27 @@ export async function PUT(request, { params }) {
               }
           });
 
-          if (UpdatedProduct) {
-            console.log(`[${new Date().toISOString()}] [INFO] ✅ 상품 수정 완료 - ${productId}`);
-            return NextResponse.json({ success: true, message: "상품 수정 완료", UpdatedProduct }, { status: 200 });
-          } else {
-            console.log(`[${new Date().toISOString()}] [WARN] 🚫 상품 수정 실패 - ${productId}`);
-            return NextResponse.json({ success: false, message: "상품 수정 실패" }, { status: 404 });
-          }
+        // 태그 연결 갱신
+        await prisma.productTag.deleteMany({
+          where: { productId: UpdatedProduct.id }
+        });
+        if (Array.isArray(tagIds) && tagIds.length > 0) {
+          await prisma.productTag.createMany({
+              data: tagIds.map(tagId => ({
+                  productId: UpdatedProduct.id,
+                  tagId: Number(tagId),
+              })),
+              skipDuplicates: true,
+          });
+        }
+
+        if (UpdatedProduct) {
+          console.log(`[${new Date().toISOString()}] [INFO] ✅ 상품 수정 완료 - ${productId}`);
+          return NextResponse.json({ success: true, message: "상품 수정 완료", UpdatedProduct }, { status: 200 });
+        } else {
+          console.log(`[${new Date().toISOString()}] [WARN] 🚫 상품 수정 실패 - ${productId}`);
+          return NextResponse.json({ success: false, message: "상품 수정 실패" }, { status: 404 });
+        }
 
       } catch (error) {
         console.log(`[${new Date().toISOString()}] [ERROR] ❌ 상품 수정 로직 실패 ${error}`);
